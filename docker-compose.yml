@@ -1,0 +1,27 @@
+version: "3"
+services:
+  revproxy:
+    image: nginx:latest
+    container_name: revproxy
+    volumes:
+      - ./site.conf:/etc/nginx/conf.d/default.conf
+      - ./mycache:/usr/share/nginx/cache
+    ports:
+      - "8080:80"
+    networks:
+      - connector
+    depends_on:
+      - demo_nginx
+
+  demo_nginx:
+    image: nginx:latest
+    container_name: demo_nginx
+    networks:
+      - connector
+    volumes:
+      - ./html:/usr/share/nginx/html
+    # ports:
+    #   - "80"
+
+networks:
+  connector: {}
